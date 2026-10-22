@@ -1,0 +1,244 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "issueUpdate": {
+      "type": "object",
+      "description": "Schema for updating Jira issues",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "The issue summary/title"
+          },
+          "description": {
+            "type": "string",
+            "description": "The issue description in markdown format. Supports headers (#), lists (-, *, 1.), bold (**), underline (__), code blocks (```), inline code (`), and links ([text](url))"
+          },
+          "assignee": {
+            "type": ["string", "null"],
+            "description": "Assignee accountId/name, or null to unassign (PUT /issue/{key}/assignee)"
+          },
+          "delivered_in_build": {
+            "type": "string",
+            "description": "Delivered in Build (customfield_10056)"
+          },
+          "worklog": {
+            "type": "object",
+            "properties": {
+              "time_spent": {"type": "string"},
+              "comment": {"type": "string"}
+            },
+            "required": ["time_spent"]
+          },
+          "fix_versions": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Fix version names or ids"
+          },
+          "fix_versions_mode": {
+            "type": "string",
+            "enum": ["set", "add", "remove"],
+            "default": "set"
+          },
+          "affects_versions": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Affects version names or ids"
+          },
+          "affects_versions_mode": {
+            "type": "string",
+            "enum": ["set", "add", "remove"],
+            "default": "set"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["Highest", "High", "Medium", "Low", "Lowest"],
+            "description": "Priority level of the issue"
+          },
+          "status": {
+            "type": "string",
+            "description": "Target status for the issue. Must be a valid status in your Jira workflow"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of labels to apply to the issue"
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of component names to associate with the issue"
+          },
+          "sprint": {
+            "type": ["string", "integer", "null"],
+            "description": "Sprint id or active/future sprint name to move the issue into; null or \"backlog\" moves it to the backlog. Applied via the Agile API (screen-independent)."
+          }
+        }
+      },
+      "example": {
+        "PROJ-123": {
+          "summary": "Implement new feature",
+          "description": "# Overview\n\nThis feature will:\n\n- Point 1\n- Point 2\n\n## Technical Details\n\n```python\ndef example():\n    pass\n```",
+          "assignee": "john.doe",
+          "priority": "High",
+          "status": "In Progress",
+          "labels": ["feature", "sprint-1"],
+          "components": ["backend", "api"],
+          "sprint": "Sprint 7"
+        }
+      }
+    },
+    "issueReport": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Jira issue key"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Issue summary/title"
+        },
+        "description": {
+          "type": "string",
+          "description": "Issue description"
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status"
+        },
+        "type": {
+          "type": "string",
+          "description": "Issue type (Epic, Story, Task, etc.)"
+        },
+        "priority": {
+          "type": "string",
+          "description": "Issue priority"
+        },
+        "assignee": {
+          "type": "string",
+          "description": "Assigned user's display name"
+        },
+        "reporter": {
+          "type": "string",
+          "description": "Reporter's display name"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        },
+        "subtasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "description": "Subtask issue key"
+              },
+              "summary": {
+                "type": "string",
+                "description": "Subtask summary"
+              }
+            }
+          },
+          "description": "List of subtasks (excluding done/canceled)"
+        },
+        "child_issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "description": "Child issue key"
+              },
+              "summary": {
+                "type": "string",
+                "description": "Child issue summary"
+              }
+            }
+          },
+          "description": "List of child issues for Epics (excluding done/canceled)"
+        },
+        "issuelinks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Type of link relationship"
+              },
+              "inward": {
+                "type": ["string", "null"],
+                "description": "Key of inward linked issue"
+              },
+              "outward": {
+                "type": ["string", "null"],
+                "description": "Key of outward linked issue"
+              }
+            }
+          },
+          "description": "List of linked issues"
+        }
+      },
+      "required": ["key", "summary", "status", "type"],
+      "example": {
+        "key": "PROJ-123",
+        "summary": "Implement new feature",
+        "description": "Feature description",
+        "status": "In Progress",
+        "type": "Story",
+        "priority": "High",
+        "assignee": "John Doe",
+        "reporter": "Jane Smith",
+        "created": "2024-01-01T12:00:00.000-0600",
+        "updated": "2024-01-02T15:30:00.000-0600",
+        "subtasks": [
+          {
+            "key": "PROJ-124",
+            "summary": "Implement backend API"
+          }
+        ],
+        "child_issues": [
+          {
+            "key": "PROJ-125",
+            "summary": "Frontend implementation"
+          }
+        ],
+        "issuelinks": [
+          {
+            "type": "Blocks",
+            "inward": "PROJ-126",
+            "outward": null
+          }
+        ]
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/definitions/issueUpdate",
+      "title": "Issue Update Schema"
+    },
+    {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/issueReport"
+      },
+      "title": "Issue Report Schema"
+    }
+  ]
+} 

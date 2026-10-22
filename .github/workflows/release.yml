@@ -1,0 +1,81 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Unit tests
+        run: |
+          python -m pip install -r requirements.txt
+          python -m unittest tests.test_adf_plain
+
+  build:
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            asset: jira-dominator-macos-arm64
+          - os: ubuntu-latest
+            asset: jira-dominator-linux-x64
+          - os: windows-latest
+            asset: jira-dominator-windows-x64.exe
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build MCP executable
+        shell: bash
+        run: bash scripts/build_mcp_binary.sh
+      - name: Name the release asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f dist/jira-dominator.exe ]; then
+            cp dist/jira-dominator.exe "${{ matrix.asset }}"
+          else
+            cp dist/jira-dominator "${{ matrix.asset }}"
+            chmod +x "${{ matrix.asset }}"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: ${{ matrix.asset }}
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Checksums
+        run: |
+          cd dist
+          sha256sum * > SHA256SUMS
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" dist/* \
+            --repo "${{ github.repository }}" \
+            --title "${{ github.ref_name }}" \
+            --notes-file docs/release-notes.md
