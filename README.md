@@ -58,7 +58,7 @@ Windows SmartScreen may warn on the first run because the file is unsigned. Choo
 
 ## 3. Create a Jira API token
 
-The binary does not contain a token. Yours stays on your machine.
+The binary does not contain a token. Yours stays on your machine, in a file Cursor reads. Do not paste the token into `mcp.json`.
 
 1. Open https://id.atlassian.com/manage-profile/security/api-tokens
 2. Create an API token.
@@ -70,28 +70,52 @@ The binary does not contain a token. Yours stays on your machine.
 
 That user must be allowed to see the projects you want the tool to touch.
 
+### Mac and Linux
+
+```bash
+mkdir -p "$HOME/.config"
+touch "$HOME/.config/jira-dominator.env"
+chmod 600 "$HOME/.config/jira-dominator.env"
+```
+
+Open that file and put exactly these three lines in it, with your values:
+
+```
+JIRA_URL=https://yourcompany.atlassian.net
+JIRA_EMAIL=you@example.com
+JIRA_API_TOKEN=paste-the-token-here
+```
+
+The path you will paste into Cursor is:
+
+```bash
+echo "$HOME/.config/jira-dominator.env"
+```
+
+### Windows
+
+Create the folder `C:\Users\YOURNAME\.config`. Create the file `C:\Users\YOURNAME\.config\jira-dominator.env` in it, with the same three lines. That full path is what you paste into Cursor.
+
 ## 4. Tell Cursor to run it
 
-Open Cursor Settings → MCP. Add a server, or edit `~/.cursor/mcp.json` directly.
+Open Cursor Settings → MCP, or edit `~/.cursor/mcp.json`.
 
-Use the absolute path from step 2. Do not use `~` in the JSON. Do not point `command` at `python`.
+`command` is the binary from step 2. `envFile` is the file from step 3. Both must be absolute paths. Do not use `~`. Do not put the token in this file. Do not point `command` at `python`.
 
 ```json
 {
   "mcpServers": {
     "jira-dominator": {
       "command": "/ABSOLUTE/PATH/FROM/STEP/2",
-      "env": {
-        "JIRA_URL": "https://yourcompany.atlassian.net",
-        "JIRA_EMAIL": "you@example.com",
-        "JIRA_API_TOKEN": "paste-the-token-here"
-      }
+      "envFile": "/ABSOLUTE/PATH/FROM/STEP/3"
     }
   }
 }
 ```
 
-Save the file. Cursor should list `jira-dominator` and connect. If it stays red, work through the failures below before you ask for help.
+If you already pasted a token into `mcp.json`, delete those `env` lines and use `envFile` instead.
+
+Save the file. Cursor should list `jira-dominator` and connect. If it stays red, work through the failures below before you ask for help. Do not commit the env file, and do not put it inside a git checkout.
 
 ## 5. Check that it works
 
@@ -105,13 +129,13 @@ Do not paste your API token into chat.
 | --- | --- |
 | macOS: "cannot be opened" or "damaged" | Run the `xattr` command in step 2. Then Privacy & Security → Open Anyway. |
 | Cursor says the command was not found | `command` is not an absolute path, or the file is still in Downloads under a different name. |
-| Connection error, 401, or 403 | The email, token, and site URL do not match. Create a new token. `JIRA_URL` must be the site root. |
-| Tools never appear | Save `mcp.json`, then reload MCP in Cursor Settings. The server only speaks MCP on stdin. Do not run it in a terminal and expect a prompt. |
+| Connection error, 401, or 403 | The email, token, and site URL in the env file do not match. Create a new token. `JIRA_URL` must be the site root. |
+| Tools never appear | `envFile` is missing, or it is not an absolute path. Save `mcp.json`, then reload MCP in Cursor Settings. The server only speaks MCP on stdin. Do not run it in a terminal and expect a prompt. |
 | Intel Mac | No build for that chip. |
 
 ## Updating
 
-Download the new file from the latest release. Replace the file at the same path you put in `command`. Keep the name. Your token stays in `mcp.json`.
+Download the new file from the latest release. Replace the file at the same path you put in `command`. Keep the name. Your token stays in the env file.
 
 ## Work on the source
 

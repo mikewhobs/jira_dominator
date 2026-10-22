@@ -2,11 +2,7 @@
   "mcpServers": {
     "jira-dominator": {
       "command": "/ABSOLUTE/PATH/TO/jira-dominator",
-      "env": {
-        "JIRA_URL": "https://yourcompany.atlassian.net",
-        "JIRA_EMAIL": "you@example.com",
-        "JIRA_API_TOKEN": "paste-the-token-here"
-      }
+      "envFile": "/ABSOLUTE/PATH/TO/jira-dominator.env"
     }
   }
 }

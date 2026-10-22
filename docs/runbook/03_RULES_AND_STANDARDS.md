@@ -123,6 +123,7 @@ cp .env.example .env  # fill credentials
 ## Git Conventions
 
 - `.env` gitignored — never commit credentials
+- Cursor MCP config uses `envFile` (release installs: `~/.config/jira-dominator.env`, mode `600`). Do not put the token in `mcp.json`.
 - `*_report.md` gitignored (generated output)
 - `migration_mapping_*.json` tracked (migration artifacts)
 - `mcp_config.json` tracked as template (contains absolute paths — adjust per machine)

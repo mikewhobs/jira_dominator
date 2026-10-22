@@ -8,7 +8,7 @@ Download the file that matches your computer. You do not clone the repo to use t
 
 There is no Intel Mac build.
 
-The file does not contain a Jira token. Put yours in Cursor's MCP config. Full steps, including the macOS quarantine command and the JSON to paste: [README](https://github.com/mikewhobs/jira_dominator#jira-dominator).
+The file does not contain a Jira token. Put the token in a file outside the repo, mode `600`, and point Cursor at it with `envFile`. Do not paste the token into `mcp.json`. Full steps: [README](https://github.com/mikewhobs/jira_dominator#3-create-a-jira-api-token).
 
 Mac, after the download:
 
@@ -17,18 +17,19 @@ mkdir -p "$HOME/.local/bin"
 mv "$HOME/Downloads/jira-dominator-macos-arm64" "$HOME/.local/bin/jira-dominator"
 xattr -d com.apple.quarantine "$HOME/.local/bin/jira-dominator"
 chmod +x "$HOME/.local/bin/jira-dominator"
+mkdir -p "$HOME/.config"
+touch "$HOME/.config/jira-dominator.env"
+chmod 600 "$HOME/.config/jira-dominator.env"
 ```
+
+Write `JIRA_URL`, `JIRA_EMAIL`, and `JIRA_API_TOKEN` into that env file. Then:
 
 ```json
 {
   "mcpServers": {
     "jira-dominator": {
       "command": "/ABSOLUTE/PATH/TO/jira-dominator",
-      "env": {
-        "JIRA_URL": "https://yourcompany.atlassian.net",
-        "JIRA_EMAIL": "you@example.com",
-        "JIRA_API_TOKEN": "paste-the-token-here"
-      }
+      "envFile": "/ABSOLUTE/PATH/TO/jira-dominator.env"
     }
   }
 }
