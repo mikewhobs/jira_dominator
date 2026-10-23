@@ -58,7 +58,7 @@ This repository is the public snapshot. It has no prior history. Release binarie
 
 The Mac binary is unsigned and not notarized. There is no Intel Mac build.
 
-Release builds use CPython 3.12, matching `.tool-versions`. `scripts/build_mcp_binary.sh` makes its own `build/venv` and must not touch the ambient interpreter. `mcp` stays on 1.30.0 until the server is rewritten for the 2.x `MCPServer` API.
+Release builds use CPython 3.12, matching `.tool-versions`. `scripts/build_mcp_binary.sh` makes its own `build/venv` and must not touch the ambient interpreter. `mcp` stays on 1.30.0 until the server is rewritten for the 2.x `MCPServer` API. PyInstaller collects `mcp.server` and `mcp.shared` only. Collecting the whole `mcp` package imports `mcp.cli`, which needs `typer` from the `mcp[cli]` extra, and the freeze fails.
 
 ## Immediate Next Steps
 

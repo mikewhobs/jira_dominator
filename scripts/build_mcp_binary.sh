@@ -59,8 +59,9 @@ echo "Building with $PY" >&2
   --distpath dist \
   --workpath build/pyinstaller \
   --specpath build \
-  --collect-submodules mcp \
+  --collect-submodules mcp.server \
+  --collect-submodules mcp.shared \
+  --hidden-import mcp.types \
   --collect-submodules jira \
   --hidden-import dotenv \
-  --hidden-import markdown \
   jira_mcp_server.py
