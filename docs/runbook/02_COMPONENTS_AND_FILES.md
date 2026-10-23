@@ -21,7 +21,6 @@ jira_dominator/
 ├── scripts/build_mcp_binary.sh
 ├── .github/workflows/release.yml  # tag v* → PyInstaller assets on GitHub Releases
 ├── docs/release-notes.md      # body text for those releases
-├── package.json               # Node dep (openclaw) — ancillary
 ├── schema.json                # JSON schema for create/update payloads
 ├── mcp_config.json            # MCP client config template
 ├── .env.example               # Credential template

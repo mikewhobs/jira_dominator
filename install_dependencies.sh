@@ -27,12 +27,8 @@ echo "📦 Upgrading pip..."
 pip3 install --upgrade pip
 
 # Install basic dependencies first
-echo "📦 Installing basic dependencies..."
-pip3 install jira==3.5.1 python-dotenv==1.0.0 markdown==3.5.1 requests==2.31.0 psutil==5.9.6
-
-# Install MCP dependencies
-echo "📦 Installing MCP dependencies..."
-pip3 install mcp==1.0.0 asyncio-mqtt==0.16.1 pydantic==2.5.0
+echo "📦 Installing Python dependencies..."
+pip3 install -r requirements.txt
 
 # Install PyObjC - this is the tricky part
 echo "📦 Installing PyObjC frameworks..."
@@ -76,12 +72,6 @@ try:
     print('✅ python-dotenv: OK')
 except ImportError as e:
     print(f'❌ python-dotenv: {e}')
-
-try:
-    import markdown
-    print('✅ markdown: OK')
-except ImportError as e:
-    print(f'❌ markdown: {e}')
 
 try:
     import mcp

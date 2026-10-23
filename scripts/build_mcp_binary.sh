@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Build a one-file MCP executable with an isolated CPython 3.12 venv.
-# jira==3.5.1 imports imghdr, which CPython removed in 3.13. Do not build on newer Pythons.
+# Build with the same CPython as .tool-versions so release binaries match local runs.
 # stdout of the finished binary must stay clean: the MCP session is stdio.
 set -euo pipefail
 
@@ -39,7 +39,7 @@ base_python() {
       return
     fi
   done
-  echo "Python 3.12 is required to build. jira 3.5.1 imports imghdr, removed in 3.13." >&2
+  echo "Python 3.12 is required to build. That is the version in .tool-versions." >&2
   return 1
 }
 

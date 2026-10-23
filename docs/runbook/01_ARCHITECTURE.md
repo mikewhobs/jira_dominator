@@ -5,14 +5,12 @@
 | Layer | Technology | Version / Notes |
 |-------|-----------|-----------------|
 | Language | Python | 3.12.13 (`.tool-versions` / mise) |
-| Jira client | `jira` | 3.5.1 — wraps REST API; forced to v3 |
-| HTTP | `requests` | 2.31.0 — direct REST calls where SDK is insufficient |
-| Config | `python-dotenv` | 1.0.0 — loads `.env` at `JiraDominator` init |
-| Markdown | `markdown` | 3.5.1 — report rendering |
-| MCP | `mcp` | 1.0.0 — stdio MCP server (`jira_mcp_server.py`) |
-| System utils | `psutil` | 5.9.6 — macOS app process management |
+| Jira client | `jira` | 3.10.5 — Cloud `search_issues` goes to `/rest/api/3/search/jql` |
+| HTTP | `requests` | 2.34.2 — direct REST calls where the SDK is insufficient |
+| Config | `python-dotenv` | 1.2.4 — loads `.env` at `JiraDominator` init |
+| MCP | `mcp` | 1.30.0 — stdio server. 2.x removed `@Server.list_tools()`; do not bump without rewriting `jira_mcp_server.py` |
+| System utils | `psutil` | 7.2.2 — macOS app process management only |
 | macOS GUI | PyObjC / AppKit | `jira_dominator_app.py` only; not in `requirements.txt` |
-| Node (ancillary) | `openclaw` | In `package.json`; not wired into Python runtime |
 
 ## System Design Pattern
 

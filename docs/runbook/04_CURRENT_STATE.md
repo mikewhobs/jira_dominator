@@ -58,7 +58,7 @@ This repository is the public snapshot. It has no prior history. Release binarie
 
 The Mac binary is unsigned and not notarized. There is no Intel Mac build.
 
-Build with CPython 3.12 only. `jira==3.5.1` imports `imghdr`, removed in 3.13, so a 3.14 freeze does not collect the Jira client. `scripts/build_mcp_binary.sh` makes its own `build/venv` and must not touch the ambient interpreter.
+Release builds use CPython 3.12, matching `.tool-versions`. `scripts/build_mcp_binary.sh` makes its own `build/venv` and must not touch the ambient interpreter. `mcp` stays on 1.30.0 until the server is rewritten for the 2.x `MCPServer` API.
 
 ## Immediate Next Steps
 

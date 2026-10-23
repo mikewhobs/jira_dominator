@@ -161,16 +161,6 @@ cp .env.example .env  # fill credentials
 - Should import from `jira_mcp_server` or be refactored
 - PyObjC/AppKit not in `requirements.txt`
 
-### README drift
-
-- README lists MCP tools like `jira_create_issue` (singular) — actual tool is `jira_create_issues`
-- README lists `jira_list_projects` — not implemented in current MCP server
-
-### `package.json` / openclaw
-
-- Untracked `package.json` + `package-lock.json` with `openclaw` dependency
-- Not integrated into Python workflow; purpose unclear
-
 ### Instance-specific workflow
 
 - Default transition path and status names assume team's Jira workflow
